@@ -1,4 +1,4 @@
-### Arith_std_30K
+### Arith30K
    
     dict(  
     role="HUMAN",  
