@@ -1,6 +1,6 @@
 ### 解答题
     def  predict_postprocess(text: str) -> str:
-
+        options=r'-?\d+\.\d+|-?\d+/?\d*'
         patterns = [
         f'answer is ({options})',
         f'[Tt]he correct answer is ({options})',
