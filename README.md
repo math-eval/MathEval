@@ -4,6 +4,8 @@ MathEval is a benchmark dedicated to a comprehensive evaluation of the mathemati
 
 
 # Evaluation Pipeline
+**The whole pipeline is time consumin, we recommend to submit your evaluation request through our [website](https://matheval.ai/)**
+
 ## Download Dataset
 Download the evaluation datasets from [Google Drive](https://drive.google.com/file/d/1_fhRIXwpHv0lGtcVShKQOKiy4ITp-ttB/view?usp=sharing)
 
@@ -24,10 +26,16 @@ Running Script:
 python preprocess_dataset/build_dataset.py --input_dir ./datasets --output_dir ./output
 
 
-## How to construct the input prompt
+## How to construct the input prompt and the inference script 
 We format the input prompt for different base model and their chat edition based on the [fastchat](https://github.com/lm-sys/FastChat/tree/main/fastchat).
 
-If you have elaborate templates for your models, implement your templates inside the conversation.py file, and change the settings in generate_shell_config.py file with your own template_name; You can also use default template_name for your model. Please also change the data_dir variable in generate_shell_config.py file.
+- If you have elaborate templates for your models, implement your **templates** inside the conversation.py file, and change the settings in generate_shell_config.py file with your own **template_name**; 
+- You can also use default template_name for your model. Please also change the **data_dir** variable in generate_shell_config.py file. The generate_shell_config.py contains all the preprocessing config for each dataset and each base model.
+- 
+
+If you have elaborate templates for your models, implement your **templates** inside the conversation.py file, and change the settings in generate_shell_config.py file with your own **template_name**; You can also use default template_name for your model. Please also change the **data_dir** variable in generate_shell_config.py file.
+
+
 
 ## How to Run your model with the processed dataset
 
