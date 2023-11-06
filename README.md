@@ -4,9 +4,28 @@ MathEval is a benchmark dedicated to a comprehensive evaluation of the mathemati
 
 
 # Evaluation Pipeline
+## Dataset preprocessing
+We unify the input format of different mathematical dataset as following:
+
+For zero shot settings:
+'''json
+{"conversations": [{"from":"human", "value":"xxx"}]}
+'''
+
+For few shot settings:
+'''json
+{"conversations": [{"from":"human", "value":example0-question}, {"from":"gpt", "value":example0-answer}, xxx]}
+'''
+
+
 ## How to construct the input prompt
 We format the input prompt for different base model and their chat edition based on the [fastchat](https://github.com/lm-sys/FastChat/tree/main/fastchat).
-## 
+
+
+## How to 
+
+
+
 
 # 数据集
 | 数据集名字（包含子数据名字） | 数据集大小 |
