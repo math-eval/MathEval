@@ -27,10 +27,6 @@ all_data_info = [
         "data_name": "asdiv-a-0shot",
     },
     {
-        "data_path": os.path.join(data_dir, "arith_std-0shot.jsonl"),
-        "data_name": "arith_std-0shot",
-    },
-    {
         "data_path": os.path.join(data_dir, "AGIEval-0shot.jsonl"),
         "data_name": "AGIEval-0shot",
     },
@@ -95,16 +91,8 @@ all_data_info = [
         "data_name": "mawps-3shot",
     },
     {
-        "data_path": os.path.join(data_dir, "bb_arithmetics-0shot.jsonl"),
-        "data_name": "bb_arithmetics-0shot",
-    },
-    {
         "data_path": os.path.join(data_dir, "BBH-0shot.jsonl"),
         "data_name": "BBH-0shot",
-    },
-    {
-        "data_path": os.path.join(data_dir, "arith_std-3shot.jsonl"),
-        "data_name": "arith_std-3shot",
     },
     {
         "data_path": os.path.join(data_dir, "math401-0shot.jsonl"),
@@ -153,10 +141,6 @@ all_data_info = [
     {
         "data_path": os.path.join(data_dir, "math401-3shot.jsonl"),
         "data_name": "math401-3shot",
-    },
-    {
-        "data_path": os.path.join(data_dir, "bb_arithmetics-3shot.jsonl"),
-        "data_name": "bb_arithmetics-3shot",
     },
     {
         "data_path": os.path.join(data_dir, "GSM8K-0shot.jsonl"),
