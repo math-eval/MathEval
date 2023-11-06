@@ -4,6 +4,9 @@ MathEval is a benchmark dedicated to a comprehensive evaluation of the mathemati
 
 
 # Evaluation Pipeline
+## Download Dataset
+Download the evaluation datasets from [Google Drive](https://drive.google.com/file/d/1_fhRIXwpHv0lGtcVShKQOKiy4ITp-ttB/view?usp=sharing)
+
 ## Dataset preprocessing
 We unify the input format of different mathematical dataset as following:
 
@@ -17,12 +20,17 @@ For few shot settings:
 {"conversations": [{"from":"human", "value":"example0-question"}, {"from":"gpt", "value":"example0-answer"}, {},{}, ...]}
 ```
 
+Running Script:
+python preprocess_dataset/build_dataset.py --input_dir ./datasets --output_dir ./output
+
 
 ## How to construct the input prompt
 We format the input prompt for different base model and their chat edition based on the [fastchat](https://github.com/lm-sys/FastChat/tree/main/fastchat).
 
+If you have elaborate templates for your models, implement your templates inside the conversation.py file, and change the settings in generate_shell_config.py file with your own template_name; You can also use default template_name for your model. Please also change the data_dir variable in generate_shell_config.py file.
 
-## How to 
+## How to Run your model with the processed dataset
+
 
 
 
