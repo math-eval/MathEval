@@ -23,8 +23,10 @@ For few shot settings:
 ```
 
 Running Script:
-python preprocess_dataset/build_dataset.py --input_dir ./datasets --output_dir ./output
 
+```shell
+python preprocess_dataset/build_dataset.py --input_dir ./datasets --output_dir ./output
+```
 
 ## How to construct the input prompt and the inference script 
 We format the input prompt for different base model and their chat edition based on the [fastchat](https://github.com/lm-sys/FastChat/tree/main/fastchat).
@@ -33,8 +35,9 @@ We format the input prompt for different base model and their chat edition based
 - You can also use default template_name for your model. Please also change the **data_dir** variable in generate_shell_config.py file. The generate_shell_config.py contains all the preprocessing config for each dataset and each base model.
 - We assume you have at least 8 80G-GPUs in your device. Please run the following script to generate the inference scripts:
 
+```shell
 python ./generate_inference_shell_scripts/generate_shell_models.py
-
+```
 
 
 If you have elaborate templates for your models, implement your **templates** inside the conversation.py file, and change the settings in generate_shell_config.py file with your own **template_name**; You can also use default template_name for your model. Please also change the **data_dir** variable in generate_shell_config.py file.
