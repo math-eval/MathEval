@@ -2,7 +2,7 @@
    
     dict(  
     role="HUMAN",  
-    prompt="Calculate the following math word problem: {expression}\n Answer:"  
+    prompt="Calculate the following math word problem: {expression}\n Answer: "  
     )
 
 
