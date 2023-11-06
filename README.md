@@ -8,14 +8,14 @@ MathEval is a benchmark dedicated to a comprehensive evaluation of the mathemati
 We unify the input format of different mathematical dataset as following:
 
 For zero shot settings:
-'''json
+```json
 {"conversations": [{"from":"human", "value":"xxx"}]}
-'''
+```
 
 For few shot settings:
-'''json
-{"conversations": [{"from":"human", "value":example0-question}, {"from":"gpt", "value":example0-answer}, xxx]}
-'''
+```json
+{"conversations": [{"from":"human", "value":"example0-question"}, {"from":"gpt", "value":"example0-answer"}, {},{}, ...]}
+```
 
 
 ## How to construct the input prompt
