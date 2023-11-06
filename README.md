@@ -4,7 +4,7 @@ MathEval is a benchmark dedicated to a comprehensive evaluation of the mathemati
 
 
 # Evaluation Pipeline
-**The whole pipeline is time consumin, we recommend to submit your evaluation request through our [website](https://matheval.ai/)**
+**The whole pipeline is time consuming, we recommend to submit your evaluation request through our [website](https://matheval.ai/)**
 
 ## Download Dataset
 Download the evaluation datasets from [Google Drive](https://drive.google.com/file/d/1_fhRIXwpHv0lGtcVShKQOKiy4ITp-ttB/view?usp=sharing)
