@@ -33,15 +33,12 @@ We format the input prompt for different base model and their chat edition based
 
 - If you have elaborate templates for your models, implement your **templates** inside the conversation.py file, and change the settings in generate_shell_config.py file with your own **template_name**; 
 - You can also use default template_name for your model. Please also change the **data_dir** variable in generate_shell_config.py file. The generate_shell_config.py contains all the preprocessing config for each dataset and each base model.
-- We assume you have at least 8 80G-GPUs in your device. Please run the following script to generate the inference scripts:
+- We assume you have at least 2 80G-GPUs in your device to run over 70B size models. You need to ensure that the model can be successfully loaded with the given num_gpus. Please run the following script to generate the inference scripts, you need to specify the path to the model's output directory, the path to the log directory, and the path to save the running shell scripts:
 
 ```shell
 python ./generate_inference_shell_scripts/generate_shell_models.py
 ```
-
-
-If you have elaborate templates for your models, implement your **templates** inside the conversation.py file, and change the settings in generate_shell_config.py file with your own **template_name**; You can also use default template_name for your model. Please also change the **data_dir** variable in generate_shell_config.py file.
-
+- You will see the generated shell scripts for model inference.
 
 
 ## How to Run your model with the processed dataset
