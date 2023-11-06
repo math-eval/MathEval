@@ -1,7 +1,11 @@
 # MathEval
 
-MathEval是一个专注于全面评估大模型数学能力的测评基准。共包含22个数学领域测评集和超过70K道数学题目，旨在全面评估大模型在包含算术，小初高竞赛和部分高等数学分支在内的各阶段、难度和数学子领域的解题能力表现，既可以作为现阶段大模型之间数学能力横向对比的一站式参考，也可以为后续如何进一步提高大模型数学能力指引方向。
+MathEval is a benchmark dedicated to a comprehensive evaluation of the mathematical capabilities of large models. It encompasses over 20 evaluation datasets across various mathematical domains, with over 30,000 math problems. The goal is to thoroughly evaluate the performance of large models in tackling problems spanning a wide range of difficulty levels and diverse mathematical subfields (i.e. arithmetic, elementary mathematics, middle and high school competition topics, advanced mathematical, etc.). It serves as the trustworthy reference for cross-model comparisons of mathematical abilities among large models at the current stage and provides guidance on how to further enhance the mathematical capabilities of these models in the future.
 
+
+# 评测框架
+## 构建输入prompt
+我们基于[fastchat](https://github.com/lm-sys/FastChat/tree/main/fastchat)来构建我们的
 
 
 # 数据集
