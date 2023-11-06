@@ -31,7 +31,11 @@ We format the input prompt for different base model and their chat edition based
 
 - If you have elaborate templates for your models, implement your **templates** inside the conversation.py file, and change the settings in generate_shell_config.py file with your own **template_name**; 
 - You can also use default template_name for your model. Please also change the **data_dir** variable in generate_shell_config.py file. The generate_shell_config.py contains all the preprocessing config for each dataset and each base model.
-- 
+- We assume you have at least 8 80G-GPUs in your device. Please run the following script to generate the inference scripts:
+
+python ./generate_inference_shell_scripts/generate_shell_models.py
+
+
 
 If you have elaborate templates for your models, implement your **templates** inside the conversation.py file, and change the settings in generate_shell_config.py file with your own **template_name**; You can also use default template_name for your model. Please also change the **data_dir** variable in generate_shell_config.py file.
 
