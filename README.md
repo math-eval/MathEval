@@ -52,7 +52,7 @@ We recommend to realize the send_chat_request function in run_gpt4_extraction.py
 
 
 # Dataset
-| 数据集名字（包含子数据名字） | 数据集大小 |
+| Dataset_name | Dataset_size |
 | ------ | ---- |
 | agieval-aqua-rat | 254 | 
 | agieval-gaokao-mathcloze | 118| 
