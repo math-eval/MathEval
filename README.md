@@ -48,6 +48,9 @@ Run the generated shell scripts to get the inference results.
 We have provide our prompt in ./prompts/extraction_prompts folder.
 We recommend to realize the send_chat_request function in run_gpt4_extraction.py by yourself, since we do not know the detailed GPT4 invoking function of yours.
 
+## How to verify the answer generated from GPT4 and the answer from the golden dataset
+We have provide our prompt in ./prompts/verification_prompts folder.
+We recommend to realize the send_chat_request function in run_gpt4_extraction.py by yourself, since we do not know the detailed GPT4 invoking function of yours.
 
 
 

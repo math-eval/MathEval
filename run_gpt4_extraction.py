@@ -242,10 +242,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_name", type=str)
     parser.add_argument('--data_name', type=str)
+    parser.add_argument("--output_dir", type=str)
     args = parser.parse_args()
     debug = False
     n_jobs = 30
-    output_dir = ""
+    output_dir = args.output_dir
     data_to_fill_record = []
     for one_data_info in all_data_info:
         for one_model_info in root_model_info:
