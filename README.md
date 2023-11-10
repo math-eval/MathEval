@@ -27,6 +27,7 @@ Running Script:
 ```shell
 python preprocess_dataset/build_dataset.py --input_dir ./datasets --output_dir ./output
 ```
+where ./datasets is the path where you save your downloaded datasets
 
 ## How to construct the input prompt and the inference script 
 We format the input prompt for different base model and their chat edition based on the [fastchat](https://github.com/lm-sys/FastChat/tree/main/fastchat).
@@ -40,9 +41,12 @@ python ./generate_inference_shell_scripts/generate_shell_models.py
 ```
 - You will see the generated shell scripts for model inference.
 
-
 ## How to Run your model with the processed dataset
+Run the generated shell scripts to get the inference results.
 
+## How to extract the answer with GPT4
+We have provide our prompt in ./prompts/extraction_prompts folder.
+We recommend to realize the send_chat_request function in run_gpt4_extraction.py by yourself, since we do not know the detailed GPT4 invoking function of yours.
 
 
 
