@@ -172,8 +172,3 @@ We recommend to realize the send_chat_request function in run_gpt4_extraction.py
 |svamp-few | 1000|
 
 
-
-# 大模型
-
-# 评测框架
-
