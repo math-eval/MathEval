@@ -60,6 +60,30 @@ We have provide our prompt in ./prompts/verification_prompts folder.
 We recommend to realize the send_chat_request function in run_gpt4_extraction.py by yourself, since we do not know the detailed GPT4 invoking function of yours.
 
 
+# Why we want to use GPT4 for answer extraction and answer verification.
+
+## The precision comparison of using GPT4 and REGEX from OpenCompass for answer extractor
+![Figure 1](/figures/extraction_comparison.png "GPT4 and REGEX from OpenCompass for answer extractor")
+
+## Corner cases for extraction
+![Figure 2](/figures/corner_case_extraction_0.png "extraction comparison 0")
+
+![Figure 3](/figures/corner_case_extraction_1.png "extraction comparison 1")
+
+![Figure 4](/figures/corner_case_extraction_2.png "extraction comparison 2")
+
+![Figure 5](/figures/corner_case_extraction_3.png "extraction comparison 3")
+
+## The precision comparison of using GPT4 and REGEX from OpenCompass for answer verification
+![Figure 6](/figures/verification_comparison.png "verification comparison")
+
+![Figure 7](/figures/corner_case_verification_0.png "verification comparison 0")
+
+![Figure 8](/figures/corner_case_verification_1.png "verification comparison 1")
+
+![Figure 9](/figures/corner_case_verification_2.png "verification comparison 2")
+
+![Figure 10](/figures/corner_case_verification_3.png "verification comparison 3")
 
 # Dataset
 | Dataset_name | Dataset_size |
