@@ -6,10 +6,10 @@ MathEval is a benchmark dedicated to a comprehensive evaluation of the mathemati
 # Evaluation Pipeline
 **The whole pipeline is time consuming, we recommend to submit your evaluation request through our [website](https://matheval.ai/)**
 
-## Download Dataset
+## Step0: Download Dataset
 Download the evaluation datasets from [Google Drive](https://drive.google.com/file/d/1_fhRIXwpHv0lGtcVShKQOKiy4ITp-ttB/view?usp=sharing)
 
-## Dataset preprocessing
+## Step1: Dataset preprocessing
 We unify the input format of different mathematical dataset as following:
 
 For zero shot settings:
@@ -29,7 +29,7 @@ python preprocess_dataset/build_dataset.py --input_dir ./datasets --output_dir .
 ```
 where ./datasets is the path where you save your downloaded datasets
 
-## How to construct the input prompt and the inference script 
+## Step2: How to construct the input prompt and the inference script 
 We format the input prompt for different base model and their chat edition based on the [fastchat](https://github.com/lm-sys/FastChat/tree/main/fastchat).
 
 - If you have elaborate templates for your models, implement your **templates** inside the conversation.py file, and change the settings in generate_shell_config.py file with your own **template_name**; 
@@ -41,18 +41,18 @@ python ./generate_inference_shell_scripts/generate_shell_models.py
 ```
 - You will see the generated shell scripts for model inference.
 
-## How to Run your model with the processed dataset
+## Step3: How to Run your model with the processed dataset
 
 Run the generated shell scripts to get the inference results.
 
-## How to extract the answer with GPT4
+## Step4: How to extract the answer with GPT4
 
 We have provide our prompt in ./prompts/extraction_prompts folder.
 
 
 We recommend to realize the send_chat_request function in run_gpt4_extraction.py by yourself, since we do not know the detailed GPT4 invoking function of yours.
 
-## How to verify the answer generated from GPT4 and the answer from the golden dataset
+## Step5: How to verify the answer generated from GPT4 and the answer from the golden dataset
 
 We have provide our prompt in ./prompts/verification_prompts folder.
 
