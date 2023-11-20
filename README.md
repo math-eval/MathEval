@@ -85,6 +85,9 @@ We recommend to realize the send_chat_request function in run_gpt4_extraction.py
 
 ![Figure 10](/figures/corner_case_verification_3.png "verification comparison 3")
 
+# Our total cost
+![Figure 11](/figures/cost.png "cost")
+
 # Dataset
 | Dataset_name | Dataset_size |
 | ------ | ---- |
