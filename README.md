@@ -49,6 +49,9 @@ Run the generated shell scripts to get the inference results.
 
 We have provide our prompt in ./prompts/extraction_prompts folder.
 
+## If you do not have access to GPT4, we have released a compare-answer model in HuggingFace, please refer to:
+
+[DeepSeek-Math-Compare-Answer](https://huggingface.co/Tianqiao/DeepSeek-7B-Math-Compare-Answer)
 
 We recommend to realize the send_chat_request function in run_gpt4_extraction.py by yourself, since we do not know the detailed GPT4 invoking function of yours.
 
