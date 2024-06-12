@@ -45,27 +45,31 @@ python ./generate_inference_shell_scripts/generate_shell_models.py
 
 Run the generated shell scripts to get the inference results.
 
-## Step4: How to extract the answer with GPT4
+## Step 4: Compare-Answer
+If you have access to GPT4, please jump to Step 5.
 
-We have provide our prompt in ./prompts/extraction_prompts folder.
-
-## If you do not have access to GPT4, we have released a compare-answer model in HuggingFace, please refer to:
-
+If you do not have access to GPT4, we have released a compare-answer model in HuggingFace, please refer to:
 [DeepSeek-Math-Compare-Answer](https://huggingface.co/Tianqiao/DeepSeek-7B-Math-Compare-Answer)
+
+## Step5: Answer-compare with GPT4
+
+### How to extract the answer
+We have provide our prompt in ./prompts/extraction_prompts folder.
 
 We recommend to realize the send_chat_request function in run_gpt4_extraction.py by yourself, since we do not know the detailed GPT4 invoking function of yours.
 
-## Step5: How to verify the answer generated from GPT4 and the answer from the golden dataset
+### How to verify the answer generated from GPT4 and the answer from the golden dataset
 
 We have provide our prompt in ./prompts/verification_prompts folder.
 
-
 We recommend to realize the send_chat_request function in run_gpt4_extraction.py by yourself, since we do not know the detailed GPT4 invoking function of yours.
 
 
-# Why we want to use GPT4 for answer extraction and answer verification.
+# Discussion
+Why we want to use GPT4 for answer extraction and answer verification.
 
-## The precision comparison of using GPT4 and REGEX from OpenCompass for answer extractor
+## precision comparison
+The precision comparison of using GPT4 and REGEX from OpenCompass for answer extractor
 ![Figure 1](/figures/extraction_comparison.png "GPT4 and REGEX from OpenCompass for answer extractor")
 
 ## Corner cases for extraction
