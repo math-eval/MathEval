@@ -3,7 +3,7 @@
 import os
 
 # change the data_dir with your own path
-data_dir = ""
+data_dir = "data"
 
 all_data_info = [
     {
@@ -166,9 +166,10 @@ all_data_info = [
 
 root_model_info = [
     {
-        "model_path": "Qwen/Qwen-14B-Chat",
+        "model_path": "/mnt/pfs/zitao_team/big_model/raw_models/Qwen-14B-Chat",
         "model_name": "Qwen-14B-Chat",
-        "num_gpu": 1,
+        "num_gpu": 8,
         "template_name": "qwen-7b-chat",
+        "vllm_enable" : 1
     }
 ]
