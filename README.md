@@ -39,16 +39,23 @@ We format the input prompt for different base model and their chat edition based
 
 ## Step3: How to Run your model with the processed dataset
 
+###Basic Run Command
 First, use the following command to run your model:
 ```
-#Basic Run Command
 python run.py --configs ./generate_shell_config.py
 ```
 
-Using VLLM for Inference Acceleration
+###Using VLLM for Inference Acceleration
 We now support using VLLM for inference acceleration. To enable VLLM acceleration, use the following command:
+```
+python run.py --configs ./generate_shell_config.py --accelerator vllm
+```
 
-Parameter Explanation
+###Installing VLLM
+To use VLLM for inference acceleration, you need to install it first. Please refer to the [VLLM GitHub repository](https://github.com/vllm-project/vllm) for installation instructions.
+
+
+###Parameter Explanation
 - --configs ./generate_shell_config.py: Specifies the path to the configuration file.
 - --accelerator vllm: (Optional) Enables VLLM for inference acceleration.
 
