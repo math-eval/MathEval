@@ -168,8 +168,7 @@ root_model_info = [
     {
         "model_path": "/mnt/pfs/zitao_team/big_model/raw_models/Qwen-14B-Chat",
         "model_name": "Qwen-14B-Chat",
-        "num_gpu": 8,
+        "num_gpu": 1,
         "template_name": "qwen-7b-chat",
-        "vllm_enable" : 1
     }
 ]

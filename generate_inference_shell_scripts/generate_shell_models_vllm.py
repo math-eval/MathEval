@@ -86,7 +86,7 @@ def generate_shell_scripts_vllm(all_data_info, root_model_info):
             script_file.write(
                 "# Kill all processes related to evaluating the model no api\n"
             )
-            script_file.write("pkill -f inference_matheval_0226.py\n\n")  # 改kill的名字
+            script_file.write("pkill -f inference_matheval.py\n\n")
 
             script_file.write(
                 'echo "All evaluations completed and related processes killed."\n'
