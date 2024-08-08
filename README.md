@@ -36,14 +36,21 @@ We format the input prompt for different base model and their chat edition based
 - You can also use default template_name for your model. Please also change the **data_dir** variable in generate_shell_config.py file. The generate_shell_config.py contains all the preprocessing config for each dataset and each base model.
 - We assume you have at least 2 80G-GPUs in your device to run over 70B size models. You need to ensure that the model can be successfully loaded with the given num_gpus. Please run the following script to generate the inference scripts, you need to specify the path to the model's output directory, the path to the log directory, and the path to save the running shell scripts:
 
-```shell
-python ./generate_inference_shell_scripts/generate_shell_models.py
-```
-- You will see the generated shell scripts for model inference.
 
 ## Step3: How to Run your model with the processed dataset
 
-Run the generated shell scripts to get the inference results.
+First, use the following command to run your model:
+```
+#Basic Run Command
+python run.py --configs ./generate_shell_config.py
+```
+
+Using VLLM for Inference Acceleration
+We now support using VLLM for inference acceleration. To enable VLLM acceleration, use the following command:
+
+Parameter Explanation
+- --configs ./generate_shell_config.py: Specifies the path to the configuration file.
+- --accelerator vllm: (Optional) Enables VLLM for inference acceleration.
 
 ## Step 4: Compare-Answer
 If you have access to GPT4, please jump to Step 5.
