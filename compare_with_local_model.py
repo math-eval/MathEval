@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import os
 import argparse
 import importlib.util
@@ -117,6 +116,3 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     main(args)
-=======
-
->>>>>>> f666a12c6e54abbb35093037309285e8649bdba6
