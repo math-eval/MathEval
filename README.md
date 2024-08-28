@@ -65,12 +65,12 @@ If you do not have access to GPT4, we have released a compare-answer model in Hu
 [DeepSeek-Math-Compare-Answer](https://huggingface.co/Tianqiao/DeepSeek-7B-Math-Compare-Answer)
 
 Now we implement compare compare_with_local_model.py
-###Example Command
+### Example Command
 ```
 python compare_with_local_model_hg.py --model_path /path/to/model --input_dir /path/to/input --output_dir /path/to/output --device_num 4
 ```
 
-###Command Line Arguments
+### Command Line Arguments
 - --model_path: Path to the pre-trained model directory.
 - --input_dir: Directory containing the input JSON files.
 - --output_dir: Directory to save the output JSON files.
