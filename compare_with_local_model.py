@@ -6,16 +6,17 @@ import subprocess
 from tqdm import tqdm
 import glob
 import torch
-from vllm import LLM, SamplingParams
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import pandas as pd
 from pathlib import Path
 import json
 import jsonlines
 from json_utils import load_json, load_jsonl, save_jsonl
+from multiprocessing import Pool, set_start_method
 
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "4,5,6,7"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1,2,3,4"
+
 
 configs = {
     "math23k": {
@@ -203,16 +204,13 @@ You are a helpful assistant.<|im_end|>
 <|im_start|>gpt
 """
 
-basic_prompt = """## 任务描述\n\n你是一个数学老师，学生提交了题目的解题步骤，你需要参考`题干`，`解析`和`答案`，判断`学生解题步骤`的结果是否正确。忽略`学生解题步骤`中的错误，只关注最后的答案。答案可能出现在`解析`中，也可能出现在`答案`中。\n\n## 输入内容\n\n题干:\n\n```\n{{question}}\n```\n\n解析:\n\n```\n{{analysis}}\n\n```\n\n答案:\n\n```\n{{answer}}\n```\n\n学生解题步骤:\n\n```\n{{pred_step}}\n```\n\n输出:"""
-base_prompt = chat_prompt.format(basic_prompt)
-
 def build_user_query(question, pred_answer, answer):
-    input_text = base_prompt.replace("{{question}}", question)
-    input_text = input_text.replace("{{pred_step}}", pred_answer)
-    input_text = input_text.replace("{{answer}}", answer)
+    instruct = "作为答案校验者，你将处理一个包括“数学问题”、“解答”及“模型预测结果”的数据结构。你的工作是从“解答”和“模型预测”部分中精确抽取数学问题的每一步答案。然后，仔细比较这两组答案的每个对应步骤。如果所有子问题的答案在意义上完全匹配，你应该在最后返回<answer>correct</answer>。反之，如果有任何不匹配之处，你应返回<answer>incorrect</answer>。务必逐步分析并清晰阐述你的对比逻辑。"
+    value_human = f"{instruct}\n\n数学问题:\n{question}\n\n解答:{answer}\n\n模型推理结果:\n{pred_answer}"
+    
+    input_text = chat_prompt.format(value_human)
     return input_text
 
-  
 def build_input_data(row, datafile):
     data_name_with_shot = Path(datafile).parent.name
 
@@ -224,71 +222,60 @@ def build_input_data(row, datafile):
     
     user_query = build_user_query(
         row_content_meta["conversations"][-1]["value"],
-        row_content_meta["raw_response"]['gen_text'],
+        row_content_meta["raw_response"],
         row_meta_meta.get(config["answer_column"], None)
-        
     )
     return user_query
 
-
 def process_data_with_chat_responses(data, model, tokenizer, device, data_file, args):
     processed_data = []
-    
-    if args.accelerator == 'vllm':
-        prompts_list = []
-        for item in tqdm(data):
-            prompt = build_input_data(item, data_file)
-            prompts_list.append(prompt)
+    for idx, item in enumerate(data):
+        prompt = build_input_data(item, data_file)
+        model_inputs = tokenizer([prompt], return_tensors="pt").to(device)
 
-        # may change here
-        sampling_params = SamplingParams(
-            temperature=0.01,
-            top_p=0.95,
-            repetition_penalty=1.0,
-            max_tokens=1024,
-            stop_token_ids= [100005],
-        )
-        
-        response_list = model.generate(prompts_list, sampling_params)
-        print(f"模型回复: {response_list}\n")
-        for idx, item in enumerate(data):
-            item["raw_response"] = response_list[idx].outputs[0].text
-            item["original_prompt"] = prompts_list[idx]
-            processed_data.append(item)
+        generated_ids = model.generate(model_inputs.input_ids, temperature=0.01, max_new_tokens=16, eos_token_id=100005)
+        generated_ids = [
+            output_ids[len(input_ids) :]
+            for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
+        ]
+
+        response = tokenizer.batch_decode(generated_ids, skip_special_tokens=False)[0]
+        item["raw_response"] = response
+        item["original_prompt"] = prompt
+        processed_data.append(item)
     
     return processed_data
 
 def generate_chat_responses(model, tokenizer, data_file, output_file, device, args):
     output_dir = os.path.dirname(output_file)
     os.makedirs(output_dir, exist_ok=True)
-    #if data_file.endswith("json"):
-    #    data = load_json(data_file)
-    #else:
     data = load_jsonl(data_file)
-    
-    if args.accelerator == 'vllm':
-        data_input = data
+    data_input = data
     
     print("Number of samples:", len(data_input))
     processed_data = process_data_with_chat_responses(data_input, model, tokenizer, device, data_file, args)
     save_jsonl(output_file, processed_data)
-    
-    
+
+def process_file(file_info):
+    model_path, one_data_info, output_file, device, args = file_info
+    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    model = AutoModelForCausalLM.from_pretrained(
+        model_path, torch_dtype="auto", device_map="auto"
+    )
+    print(f"Processing file: {one_data_info}")
+    generate_chat_responses(model, tokenizer, one_data_info, output_file, device, args)
+
 def generate_chat_responses_all(args):
     all_data_info = glob.glob(os.path.join(args.input_dir, '**', '*.json'), recursive=True)
     
     device = "cpu" if not torch.cuda.is_available() else "cuda"
     print("Device to inference: {}".format(device))
     model_path = args.model_path
-    if args.accelerator == 'vllm':
-        tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
-        model = LLM(model=model_path, trust_remote_code=True, tensor_parallel_size=args.device_num)
-        print("loading model success.....")
-    for one_data_info in all_data_info:
-        base_data_name = os.path.basename(one_data_info)
-        output_file = os.path.join(args.output_dir, base_data_name + ".json")
-        generate_chat_responses(model, tokenizer, one_data_info, output_file, device, args)
-        
+    
+    file_info_list = [(model_path, one_data_info, os.path.join(args.output_dir, os.path.basename(one_data_info)), device, args) for one_data_info in all_data_info]
+    
+    with Pool(processes=args.device_num) as pool:
+        pool.map(process_file, file_info_list)
 
 def main(args):
     if not os.path.exists(args.output_dir):
@@ -301,20 +288,14 @@ def main(args):
             
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_path", type=str, default="Tianqiao/DeepSeek-7B-Math-Compare-Answer")
-    #parser.add_argument("--
-    # ", type=str, default="/mnt/pfs/zitao_team/big_model/raw_models/qwen2/Qwen2-72B-Instruct")
-    parser.add_argument("--input_dir", type=str, default="/mnt/pfs/zitao_team/fangzhensheng/MathEval/result_cot/Qwen-14B-Chat")
-    parser.add_argument("--output_dir", type=str, help="Path to the output file", default="/mnt/pfs/zitao_team/fangzhensheng/MathEval/compare_result/Qwen-14B-Chat")
+    parser.add_argument("--model_path", type=str, default="/mnt/pfs/zitao_team/big_model/raw_models/DeepSeek-7B-Math-Compare-Answer")
+    parser.add_argument("--input_dir", type=str, default="/mnt/pfs/zitao_team/fangzhensheng/matheval-new/MathEval-new/result_nips_vllm/0510/llama-3-8b-rewrite")
+    parser.add_argument("--output_dir", type=str, help="Path to the output file", default="/mnt/pfs/zitao_team/fangzhensheng/MathEval/compare_result/llama-3-8b-rewrite")
     parser.add_argument(
         "--device_num", type=int, default=4, help="number of gpus to use"
     )   
-    parser.add_argument(
-        "--accelerator", 
-        type=str, 
-        default="vllm", 
-        help="Specify the accelerator for inference. Supported options: 'vllm'. Leave empty for default settings."
-    )
+    # Set the start method to 'spawn'
+    set_start_method('spawn', force=True)
 
     args = parser.parse_args()
     main(args)
