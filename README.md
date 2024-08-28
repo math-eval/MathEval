@@ -54,7 +54,6 @@ python run.py --configs ./generate_shell_config.py --accelerator vllm
 ### Installing VLLM
 To use VLLM for inference acceleration, you need to install it first. Please refer to the [VLLM GitHub repository](https://github.com/vllm-project/vllm) for installation instructions.
 
-
 ### Parameter Explanation
 - --configs ./generate_shell_config.py: Specifies the path to the configuration file.
 - --accelerator vllm: (Optional) Enables VLLM for inference acceleration.
@@ -64,6 +63,18 @@ If you have access to GPT4, please jump to Step 5.
 
 If you do not have access to GPT4, we have released a compare-answer model in HuggingFace, please refer to:
 [DeepSeek-Math-Compare-Answer](https://huggingface.co/Tianqiao/DeepSeek-7B-Math-Compare-Answer)
+
+Now we implement compare compare_with_local_model.py
+###Example Command
+```
+python compare_with_local_model_hg.py --model_path /path/to/model --input_dir /path/to/input --output_dir /path/to/output --device_num 4
+```
+
+###Command Line Arguments
+- --model_path: Path to the pre-trained model directory.
+- --input_dir: Directory containing the input JSON files.
+- --output_dir: Directory to save the output JSON files.
+- --device_num: Number of GPUs to use for parallel processing.
 
 ## Step5: Answer-compare with GPT4
 
