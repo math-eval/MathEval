@@ -32,16 +32,9 @@ def generate_shell_scripts_vllm(all_data_info, root_model_info):
             # script_file.write(
             #     f"pip install transformers_stream_generator tiktoken -i https://pypi.tuna.tsinghua.edu.cn/simple\n"
             # )
-            gpu_id_assignment = []
-            gpu_id_assignment.append(f"0,1,2,3,4,5,6,7")
-            row_gpu_ids = "("
-            for one_id_tuple in gpu_id_assignment:
-                row_gpu_ids += '"' + one_id_tuple + '"' + " "
-            row_gpu_ids = row_gpu_ids.strip()
-            row_gpu_ids += ")"
-
+            gpu_id_assignment = ",".join(map(str, range(device_num)))
             script_file.write(f'output_dir="{output_dir_model_data}"\n')
-            script_file.write(f"gpu_ids={row_gpu_ids}\n")
+            script_file.write(f"gpu_ids={gpu_id_assignment}\n")
             script_file.write(f"model_path={model_path}\n")
             script_file.write(f"model_name={model_name}\n")
             script_file.write(f"device_num={device_num}\n")
@@ -57,7 +50,7 @@ def generate_shell_scripts_vllm(all_data_info, root_model_info):
             #script_file.write("    gpu_id=${gpu_ids[$i]}\n")
 
             script_file.write(
-                f'echo "开始评估模型: $model_name, GPU ID: $gpu_id, Start index: $start_index, End index: $end_index"\n'
+                f'echo "开始评估模型: $model_name, GPU ID: $gpu_ids, Start index: $start_index, End index: $end_index"\n'
             )
 
             script_file.write(f'output_dir="$output_dir"\n')
@@ -65,7 +58,7 @@ def generate_shell_scripts_vllm(all_data_info, root_model_info):
             script_file.write(f'log_file="$log_dir_model_data/${{model_name}}.log"\n\n')
 
             script_file.write(
-                'command="CUDA_VISIBLE_DEVICES=$gpu_id nohup python3 -u ./inference_matheval.py'
+                'command="CUDA_VISIBLE_DEVICES=$gpu_ids nohup python3 -u ./inference_matheval.py'
             )  # 改inference的python文件
             script_file.write(
                 f" --model_name $model_name --model_path $model_path --device_num $device_num --data_file $data_file"
