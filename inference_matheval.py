@@ -10,6 +10,7 @@ import torch
 from prompt_builder import build_prompt
 from json_utils import load_json, load_jsonl, save_jsonl
 from transformers import AutoTokenizer
+from generate_shell_config import root_model_info, all_data_info
 
 base_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(base_path, "../"))
@@ -18,7 +19,7 @@ from tqdm import tqdm
 import pandas as pd
 import argparse
 
-from generate_shell_config import root_model_info
+
 
 model_info_dict = {x['model_name']:x for x in root_model_info}
 
@@ -113,7 +114,7 @@ def generate_chat_responses_all_vllm(args):
             )
         else:
             model = LLM(model=model_path, tensor_parallel_size=args.device_num)
-    all_data_info = load_json(args.data_file)
+    
     for one_data_info in all_data_info:
         base_data_name = os.path.basename(one_data_info["data_path"]).replace(".jsonl", "")
         output_file = os.path.join(args.output_dir, base_data_name + ".json")
@@ -125,7 +126,6 @@ if __name__ == "__main__":
         "--model_name", type=str, default="chatglm2-6b", help="Name of the model"
     )
     parser.add_argument("--model_path", type=str, default="/mnt/pfs/zitao_team/tianqiaoliu/public_github/ChatGLM2-6B/ptuning/output/mathgpt-chatglm2-6b-ft-2e-5/checkpoint-POINTNUM")
-    parser.add_argument("--data_file", type=str, help="Path to the input data file", default="/mnt/pfs/zitao_team/big_model/processed_data/test_data_junior_small.json")
     parser.add_argument("--output_dir", type=str, help="Path to the output file", default="./results/chatglm2-6b/test_data_small_with_response_chatglm2_POINTNUM.json")
     parser.add_argument("--start_index", type=int, help="Where to start the slice of the dataset")
     parser.add_argument("--end_index", type=int, help="The size of the slice of the dataset")
@@ -145,6 +145,4 @@ if __name__ == "__main__":
         from vllm import LLM, SamplingParams
         print("generate responses accelerator vllm.")
         generate_chat_responses_all_vllm(args)
-        
-
         

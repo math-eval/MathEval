@@ -4,11 +4,10 @@ import os
 from datetime import datetime
 
 def generate_shell_scripts_vllm(all_data_info, root_model_info):
-    date = date = datetime.now().strftime("%Y_%m%d")
+    date = datetime.now().strftime("%Y_%m%d")
     output_dir = "./result_cot" # the generated result path
     where_to_save_shell = "./generated_shell_cot" # the path to save model inference shell scripts
     log_file = "./logs_cot" # the dir to save log files.
-    data_config_file = "./infer_config/data_config_0511.json"
     
     script_file_names = []
 
@@ -30,16 +29,12 @@ def generate_shell_scripts_vllm(all_data_info, root_model_info):
 
         with open(script_file_name, "w") as script_file:
             script_file.write("#!/bin/bash\n\n")
-            # script_file.write(
-            #     f"pip install transformers_stream_generator tiktoken -i https://pypi.tuna.tsinghua.edu.cn/simple\n"
-            # )
             gpu_id_assignment = ",".join(map(str, range(device_num)))
             script_file.write(f'output_dir="{output_dir_model_data}"\n')
             script_file.write(f'gpu_ids="{gpu_id_assignment}"\n')
             script_file.write(f"model_path={model_path}\n")
             script_file.write(f"model_name={model_name}\n")
             script_file.write(f"device_num={device_num}\n")
-            script_file.write(f"data_file={data_config_file}\n")
             script_file.write(f"log_dir_model_data={log_dir_model_data}\n")
 
             script_file.write(f'mkdir -p "$output_dir"\n')
@@ -62,7 +57,7 @@ def generate_shell_scripts_vllm(all_data_info, root_model_info):
                 'command="CUDA_VISIBLE_DEVICES=$gpu_ids nohup python3 -u ./inference_matheval.py'
             )  # 改inference的python文件
             script_file.write(
-                f" --model_name $model_name --model_path $model_path --device_num $device_num --data_file $data_file"
+                f" --model_name $model_name --model_path $model_path --device_num $device_num"
             )
             script_file.write(' --accelerator vllm')
             script_file.write(

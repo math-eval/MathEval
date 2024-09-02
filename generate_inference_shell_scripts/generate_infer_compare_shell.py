@@ -3,7 +3,6 @@ from datetime import datetime
 output_dir_infer = "/mnt/pfs/zitao_team/fangzhensheng/MathEval/all_infer_result"
 output_dir_compare = "/mnt/pfs/zitao_team/fangzhensheng/MathEval/all_compare_result"
 log_dir="/mnt/pfs/zitao_team/fangzhensheng/MathEval/all_infer_compare_logs"
-data_config_file = "/mnt/pfs/zitao_team/fangzhensheng/MathEval/infer_config/data_config_0511.json"
 where_to_save_shell = "/mnt/pfs/zitao_team/fangzhensheng/MathEval/all_infer_compare_shell"
 
 def generate_infer_compare_shell(all_data_info, root_model_info):
@@ -41,7 +40,6 @@ def generate_infer_compare_shell(all_data_info, root_model_info):
             script_file.write(f"model_path={model_path}\n")
             script_file.write(f"model_name={model_name}\n")
             script_file.write(f"device_num={device_num}\n")
-            script_file.write(f"data_file={data_config_file}\n")
             log_file = os.path.join(log_dir_model_data, model_name + ".log")
             script_file.write(f"log_file={log_file}\n")
             
@@ -51,7 +49,7 @@ def generate_infer_compare_shell(all_data_info, root_model_info):
             script_file.write(f'echo "开始评估模型: $model_name, GPU ID: $gpu_ids"\n')
 
             script_file.write('command_infer="CUDA_VISIBLE_DEVICES=$gpu_ids nohup python3 -u /mnt/pfs/zitao_team/fangzhensheng/MathEval/inference_matheval.py')
-            script_file.write(f" --model_name $model_name --model_path $model_path --device_num $device_num --data_file $data_file")
+            script_file.write(f" --model_name $model_name --model_path $model_path --device_num $device_num")
             script_file.write(f' --output_dir $output_dir_infer --max_new_tokens 512 > $log_file 2>&1 &"\n\n')
 
             script_file.write('eval "$command_infer"\n')
