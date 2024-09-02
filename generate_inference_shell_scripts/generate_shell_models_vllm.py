@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 import os
+from datetime import datetime
 
 def generate_shell_scripts_vllm(all_data_info, root_model_info):
-    date = "vllm_infer"
+    date = date = datetime.now().strftime("%Y_%m%d")
     output_dir = "./result_cot" # the generated result path
     where_to_save_shell = "./generated_shell_cot" # the path to save model inference shell scripts
     log_file = "./logs_cot" # the dir to save log files.
@@ -34,7 +35,7 @@ def generate_shell_scripts_vllm(all_data_info, root_model_info):
             # )
             gpu_id_assignment = ",".join(map(str, range(device_num)))
             script_file.write(f'output_dir="{output_dir_model_data}"\n')
-            script_file.write(f"gpu_ids={gpu_id_assignment}\n")
+            script_file.write(f'gpu_ids="{gpu_id_assignment}"\n')
             script_file.write(f"model_path={model_path}\n")
             script_file.write(f"model_name={model_name}\n")
             script_file.write(f"device_num={device_num}\n")
