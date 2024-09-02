@@ -15,8 +15,6 @@ from json_utils import load_json, load_jsonl, save_jsonl
 from multiprocessing import Pool, set_start_method
 
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "1,2,3,4"
-
 
 configs = {
     "math23k": {
@@ -195,6 +193,14 @@ configs = {
         "shots": [0, 3],
         "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F]",
     },
+    "olypiadbench": {
+        # cmmlu
+        # https://github.com/haonan-li/CMMLU/blob/master
+        "name": "olypiadbench",
+        "answer_column": "answer",
+        "shots": [0, 3],
+        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F]",
+    },
 }
 
 chat_prompt = """<|im_start|>system
@@ -212,7 +218,7 @@ def build_user_query(question, pred_answer, answer):
     return input_text
 
 def build_input_data(row, datafile):
-    data_name_with_shot = Path(datafile).parent.name
+    data_name_with_shot = Path(datafile).name
 
     one_data_name_row = data_name_with_shot.split("-")[0].lower()
     config = configs[one_data_name_row]
@@ -229,21 +235,35 @@ def build_input_data(row, datafile):
 
 def process_data_with_chat_responses(data, model, tokenizer, device, data_file, args):
     processed_data = []
-    for idx, item in enumerate(data):
+    data_file_basename = os.path.basename(data_file)
+    for idx, item in tqdm(enumerate(data), total=len(data), desc=f"Processing data {data_file_basename}"):
         prompt = build_input_data(item, data_file)
-        model_inputs = tokenizer([prompt], return_tensors="pt").to(device)
+        model_inputs = tokenizer([prompt], return_tensors="pt", padding=True).to(device)
 
-        generated_ids = model.generate(model_inputs.input_ids, temperature=0.01, max_new_tokens=16, eos_token_id=100005)
+        # 获取 input_ids 和 attention_mask
+        input_ids = model_inputs.input_ids
+        attention_mask = model_inputs.attention_mask
+
+        # 生成文本
+        generated_ids = model.generate(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            temperature=0.01,
+            max_new_tokens=16,
+            eos_token_id=100005,
+            pad_token_id=tokenizer.pad_token_id  # 确保设置 pad_token_id
+        )
+
+        # 处理生成的 ID
         generated_ids = [
             output_ids[len(input_ids) :]
-            for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
+            for input_ids, output_ids in zip(input_ids, generated_ids)
         ]
 
         response = tokenizer.batch_decode(generated_ids, skip_special_tokens=False)[0]
         item["raw_response"] = response
         item["original_prompt"] = prompt
         processed_data.append(item)
-    
     return processed_data
 
 def generate_chat_responses(model, tokenizer, data_file, output_file, device, args):
