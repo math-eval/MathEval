@@ -39,14 +39,8 @@ We format the input prompt for different base model and their chat edition based
 
 ## Step3: How to Run your model with the processed dataset
 
-### Basic Run Command
-First, use the following command to run your model:
-```
-python run.py --configs ./generate_shell_config.py
-```
-
 ### Using VLLM for Inference Acceleration
-We now support using VLLM for inference acceleration. To enable VLLM acceleration, use the following command:
+We now only support using VLLM for inference acceleration. To enable VLLM acceleration, use the following command:
 ```
 python run.py --configs ./generate_shell_config.py --accelerator vllm
 ```
@@ -54,9 +48,18 @@ python run.py --configs ./generate_shell_config.py --accelerator vllm
 ### Installing VLLM
 To use VLLM for inference acceleration, you need to install it first. Please refer to the [VLLM GitHub repository](https://github.com/vllm-project/vllm) for installation instructions.
 
+### Running Mode
+We now support two modes: "infer" and "eval". In "infer" mode, the system only generates model outputs. In "eval" mode, the system not only generates model outputs but also compares them with the real answers using the compare-model.
+
+The default mode is "infer". To start in "eval" mode, you can use the following command:
+```
+python run.py --configs ./generate_shell_config.py --accelerator vllm --mode eval
+```
+We have separated the modes for greater flexibility. You can compare the answers using either GPT-4 or the compare-model.
+
 ### Parameter Explanation
 - --configs ./generate_shell_config.py: Specifies the path to the configuration file.
-- --accelerator vllm: (Optional) Enables VLLM for inference acceleration.
+- --accelerator vllm: Enables VLLM for inference acceleration.
 
 ## Step 4: Compare-Answer
 If you have access to GPT4, please jump to Step 5.
@@ -67,7 +70,7 @@ If you do not have access to GPT4, we have released a compare-answer model in Hu
 Now we implement compare compare_with_local_model.py
 ### Example Command
 ```
-python compare_with_local_model_hg.py --model_path /path/to/model --input_dir /path/to/input --output_dir /path/to/output --device_num 4
+python compare_with_local_model.py --model_path /path/to/model --input_dir /path/to/input --output_dir /path/to/output --device_num 4
 ```
 
 ### Command Line Arguments
