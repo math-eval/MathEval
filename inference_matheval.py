@@ -8,7 +8,6 @@ import copy
 import transformers
 import torch
 from prompt_builder import build_prompt
-from inference_fastchat import generate_stream
 from json_utils import load_json, load_jsonl, save_jsonl
 from transformers import AutoTokenizer
 
@@ -99,24 +98,10 @@ def generate_chat_responses(model, tokenizer, data_file, output_file, device, ar
     processed_data = process_data_with_chat_responses(data_input, model, tokenizer, device, model_inference_config, args)
     save_jsonl(output_file, processed_data)
     
-def generate_chat_responses_fastchat(args): 
-    device = "cpu" if not torch.cuda.is_available() else "cuda"
-    print("Device to inference: {}".format(device))
-    model_path = args.model_path
-    model, tokenizer = load_model(model_path, device=device, num_gpus=args.device_num)
-    
-    generate_chat_responses(
-        model, 
-        tokenizer,
-        args.data_file,
-        args.output_file.format(model_name=args.model_name),
-        device,
-        args
-    )
-    
 def generate_chat_responses_all_vllm(args):
     device = "cpu" if not torch.cuda.is_available() else "cuda"
     print("Device to inference: {}".format(device))
+    print("CUDA_VISIBLE_DEVICES:", os.environ.get("CUDA_VISIBLE_DEVICES"))
     model_path = args.model_path
     if args.accelerator == 'vllm':
         tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
@@ -141,29 +126,25 @@ if __name__ == "__main__":
     )
     parser.add_argument("--model_path", type=str, default="/mnt/pfs/zitao_team/tianqiaoliu/public_github/ChatGLM2-6B/ptuning/output/mathgpt-chatglm2-6b-ft-2e-5/checkpoint-POINTNUM")
     parser.add_argument("--data_file", type=str, help="Path to the input data file", default="/mnt/pfs/zitao_team/big_model/processed_data/test_data_junior_small.json")
-    parser.add_argument("--output_file", type=str, help="Path to the output file", default='./results/chatglm2-6b/test_data_small_with_response_chatglm2_POINTNUM.json')
     parser.add_argument("--output_dir", type=str, help="Path to the output file", default="./results/chatglm2-6b/test_data_small_with_response_chatglm2_POINTNUM.json")
     parser.add_argument("--start_index", type=int, help="Where to start the slice of the dataset")
     parser.add_argument("--end_index", type=int, help="The size of the slice of the dataset")
-    parser.add_argument("--gpu_id", type=str, default="7", help="ID of the GPU to use")
     parser.add_argument("--device_num", type=int, default=1, help="number of gpus to use")
     parser.add_argument("--max_new_tokens", type=int, help="The maximum num of max new tokens")
     parser.add_argument("--stop_str", type=str, default="", help="the stop string for the model for this dataset")
     parser.add_argument(
         "--accelerator", 
         type=str, 
-        default="", 
+        default="vllm", 
         help="Specify the accelerator for inference. Supported options: 'vllm'. Leave empty for default settings."
     )
     parser.add_argument('--few_shot', action='store_true', help='whether to activate few shot or not')
     args = parser.parse_args()
-    os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpu_id)
     
     if args.accelerator == 'vllm':
         from vllm import LLM, SamplingParams
+        print("generate responses accelerator vllm.")
         generate_chat_responses_all_vllm(args)
-    else:
-        from fastchat.model.model_adapter import load_model
-        from fastchat.utils import is_partial_stop
-        generate_chat_responses_fastchat(args)
+        
+
         
