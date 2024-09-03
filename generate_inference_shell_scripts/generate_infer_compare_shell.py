@@ -59,7 +59,7 @@ def generate_infer_compare_shell(all_data_info, root_model_info):
             script_file.write("done\n\n")
 
             script_file.write("# Kill all processes related to evaluating the model no api\n")
-            script_file.write("pkill -f inference_matheval_0226.py\n\n")
+            script_file.write("pkill -f inference_matheval.py\n\n")
 
             script_file.write('echo "Inference completed and related processes killed."\n\n')
 

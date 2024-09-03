@@ -11,6 +11,7 @@ from prompt_builder import build_prompt
 from json_utils import load_json, load_jsonl, save_jsonl
 from transformers import AutoTokenizer
 from generate_shell_config import root_model_info, all_data_info
+from vllm import LLM, SamplingParams
 
 base_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(base_path, "../"))
@@ -19,27 +20,7 @@ from tqdm import tqdm
 import pandas as pd
 import argparse
 
-
-
 model_info_dict = {x['model_name']:x for x in root_model_info}
-
-def generate_one_response(model, tokenizer, device, prompt, args):
-    system_template = """{}"""
-    params = {
-        "prompt": system_template.format(prompt),
-        "temperature": 0.01,
-        "top_p": 1.0,
-        "max_new_tokens": args.max_new_tokens,
-        "stream_interval": 1,
-    }
-    completion = generate_stream(model, tokenizer, params, device)
-    
-    response = None
-    # Iterate through the completion generator
-    for one_text in completion:
-        response = one_text  # Update response with the latest generated text
-    
-    return response
 
 def process_data_with_chat_responses(data, model, tokenizer, device, model_inference_config, args):
     processed_data = []
@@ -59,7 +40,7 @@ def process_data_with_chat_responses(data, model, tokenizer, device, model_infer
             temperature=0.01,
             top_p=0.95,
             repetition_penalty=1.0,
-            max_tokens=512,
+            max_tokens=args.max_new_tokens,
             # stop_token_ids=[tokenizer.eos_token_id],
         )
         
@@ -68,15 +49,6 @@ def process_data_with_chat_responses(data, model, tokenizer, device, model_infer
             item["raw_response"] = response_list[idx].outputs[0].text
             item["original_prompt"] = prompts_list[idx]
             processed_data.append(item)
-    else:
-        for item in tqdm(data):
-            prompt = build_prompt(item['conversations'], template_name, args)
-            response = generate_one_response(model, tokenizer, device, prompt, args)
-            item["original_prompt"] = prompt
-            item["raw_response"] = response
-            processed_data.append(item)
-            print("Raw prompt:", prompt)
-            print("Generated chat response:", response)
     
     return processed_data
 
@@ -127,22 +99,20 @@ if __name__ == "__main__":
     )
     parser.add_argument("--model_path", type=str, default="/mnt/pfs/zitao_team/tianqiaoliu/public_github/ChatGLM2-6B/ptuning/output/mathgpt-chatglm2-6b-ft-2e-5/checkpoint-POINTNUM")
     parser.add_argument("--output_dir", type=str, help="Path to the output file", default="./results/chatglm2-6b/test_data_small_with_response_chatglm2_POINTNUM.json")
-    parser.add_argument("--start_index", type=int, help="Where to start the slice of the dataset")
-    parser.add_argument("--end_index", type=int, help="The size of the slice of the dataset")
     parser.add_argument("--device_num", type=int, default=1, help="number of gpus to use")
-    parser.add_argument("--max_new_tokens", type=int, help="The maximum num of max new tokens")
-    parser.add_argument("--stop_str", type=str, default="", help="the stop string for the model for this dataset")
     parser.add_argument(
         "--accelerator", 
         type=str, 
         default="vllm", 
         help="Specify the accelerator for inference. Supported options: 'vllm'. Leave empty for default settings."
     )
+    parser.add_argument(
+        "--max_new_tokens", type=int, help="The maximum num of max new tokens"
+    )
     parser.add_argument('--few_shot', action='store_true', help='whether to activate few shot or not')
     args = parser.parse_args()
     
     if args.accelerator == 'vllm':
-        from vllm import LLM, SamplingParams
         print("generate responses accelerator vllm.")
         generate_chat_responses_all_vllm(args)
         

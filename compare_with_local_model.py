@@ -18,188 +18,73 @@ import os
 
 configs = {
     "math23k": {
-        # math23k
-        # https://arxiv.org/pdf/2109.03034v1.pdf
-        "name": "math23k",
         "answer_column": "ans",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}",
     },
     "mathqa": {
-        # MathQA
-        # https://arxiv.org/pdf/1907.01642v1.pdf
-        "name": "MathQA",
         "answer_column": "correct",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[a-e]",
     },
     "ape210k": {
-        # ape210k
-        # https://github.com/Chenny0808/ape210k
-        "name": "ape210k",
         "answer_column": "ans",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}",
     },
     "gsm8k": {
-        # GSM8K
-        # https://arxiv.org/pdf/2110.14168.pdf
-        "name": "GSM8K",
         "answer_column": "direct_answer",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}",
     },
     "mmlu": {
-        # mmlu
-        # https://arxiv.org/pdf/2009.03300.pdf
-        "name": "mmlu",
         "answer_column": "target",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F]",
     },
     "bb_arithmetics": {
-        # bb_arithmetics
-        # https://github.com/google/BIG-bench/tree/main/bigbench/benchmark_tasks/arithmetic
-        "name": "bb_arithmetics",
         "answer_column": "target",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*",
     },
     "arith_std": {
-        # arith_std
-        # from TAL
-        "name": "arith_std",
         "answer_column": "answer",
-        "shots": [0, 3],
-        "options": r"####\s?(\-?\d+[\.|\,]?\d*i*)\s?|answer is (\-?\d+[\.|\,]?\d*i*)|=\s*(\-?\d+[\.|\,]?\d*i*)\n|(\-?\d+[\.|\,]?\d*i*)\n|(\-?\d+[\.|\,]?\d*i*)",
     },
     "gaokao": {
-        # GAOKAO-BENCH
-        # https://arxiv.org/pdf/2305.12474v2.pdf
-        "name": "GAOKAO-BENCH",
         "answer_column": "answer",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F]",
     },
     "mawps": {
-        # mawps
-        # https://aclanthology.org/N16-1136.pdf
-        "name": "mawps",
         "answer_column": "ans",
-        "shots": [0, 3],
-        "options": r"####\s?(\-?\d+[\.|\,]?\d*)\s?|answer is (\-?\d+[\.|\,]?\d*)|answer is .*\=\s?(\-?\d+[\.|\,]?\d*)\$|\=\s?(\-?\d+[\.|\,]?\d*).*\n|(\-?\d+[\.|\,]?\d*)",
     },
     "bbh": {
-        # BBH
-        # https://arxiv.org/pdf/2210.09261.pdf
-        "name": "BBH",
         "answer_column": "target",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F]",
     },
     "scq_en": {
-        # scq_en
-        # https://huggingface.co/datasets/math-eval/TAL-SCQ5K
-        "name": "scq_en",
         "answer_column": "answer",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F]",
     },
     "scq_ch": {
-        # scq_ch
-        # https://huggingface.co/datasets/math-eval/TAL-SCQ5K
-        "name": "scq_ch",
         "answer_column": "answer",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F]",
     },
     "math": {
-        # math
-        # https://arxiv.org/pdf/2103.03874.pdf
-        "name": "math",
         "answer_column": "solution",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}",
     },
     "asdiv": {
-        # asdiv-a
-        # https://github.com/LYH-YF/MWPToolkit/blob/master/dataset/asdiv-a/
-        "name": "asdiv-a",
         "answer_column": "answer",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F]",
     },
     "svamp": {
-        # svamp
-        # https://github.com/arkilpatel/SVAMP
-        "name": "svamp",
         "answer_column": "answer",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F]",
     },
     "math401": {
-        # math401
-        # https://github.com/GanjinZero/math401-llm
-        "name": "math401",
         "answer_column": "response",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F]",
     },
     "draw": {
-        # draw
-        # https://github.com/LYH-YF/MWPToolkit/blob/master/dataset/draw/
-        "name": "draw",
         "answer_column": "answer",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F]",
     },
     "dolphin1878": {
-        # dolphin1878
-        # https://www.microsoft.com/en-us/research/project/sigmadolphin/
-        "name": "dolphin1878",
         "answer_column": "ans",
-        "shots": [0, 3],
-        "options": r"[-+]?\d+(?:,\d+)?(?:\.\d+)?",
     },
     "hmwp": {
-        # hmwp
-        # https://github.com/QinJinghui/SAU-Solver
-        "name": "hmwp",
         "answer_column": "ans",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F]",
     },
     "ceval": {
-        # ceval
-        # https://github.com/SJTU-LIT/ceval
-        "name": "ceval",
         "answer_column": "answer",
-        "shots": [0],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F]",
     },
     "agieval": {
-        # AGIEval
-        # https://github.com/microsoft/AGIEval/blob/main/
-        "name": "AGIEval",
         "answer_column": "label",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F\s]{1,4}",
     },
     "cmmlu": {
-        # cmmlu
-        # https://github.com/haonan-li/CMMLU/blob/master
-        "name": "cmmlu",
         "answer_column": "Answer",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F]",
     },
     "olypiadbench": {
-        # cmmlu
-        # https://github.com/haonan-li/CMMLU/blob/master
-        "name": "olypiadbench",
         "answer_column": "answer",
-        "shots": [0, 3],
-        "options": r"-?\d+\.\d+|-?\d+/?\d*|\d*frac\{-?\d+\}\{\d+\}|[A-F]",
     },
 }
 
@@ -244,17 +129,15 @@ def process_data_with_chat_responses(data, model, tokenizer, device, data_file, 
         input_ids = model_inputs.input_ids
         attention_mask = model_inputs.attention_mask
 
-        # 生成文本
         generated_ids = model.generate(
             input_ids=input_ids,
             attention_mask=attention_mask,
             temperature=0.01,
             max_new_tokens=16,
             eos_token_id=100005,
-            pad_token_id=tokenizer.pad_token_id  # 确保设置 pad_token_id
+            pad_token_id=tokenizer.pad_token_id
         )
 
-        # 处理生成的 ID
         generated_ids = [
             output_ids[len(input_ids) :]
             for input_ids, output_ids in zip(input_ids, generated_ids)

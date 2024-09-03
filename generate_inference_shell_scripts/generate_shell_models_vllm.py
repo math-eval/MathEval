@@ -41,10 +41,6 @@ def generate_shell_scripts_vllm(all_data_info, root_model_info):
             script_file.write(
                 f"pids=() # Array to store the PIDs of the background processes\n\n"
             )
-
-            #script_file.write("for ((i=0; i<${#gpu_ids[@]}; i++)); do\n")
-            #script_file.write("    gpu_id=${gpu_ids[$i]}\n")
-
             script_file.write(
                 f'echo "开始评估模型: $model_name, GPU ID: $gpu_ids, Start index: $start_index, End index: $end_index"\n'
             )
