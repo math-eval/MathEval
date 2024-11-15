@@ -65,7 +65,7 @@ We have separated the modes for greater flexibility. You can compare the answers
 If you have access to GPT4, please jump to Step 5.
 
 If you do not have access to GPT4, we have released a compare-answer model in HuggingFace, please refer to:
-[DeepSeek-Math-Compare-Answer](https://huggingface.co/Tianqiao/DeepSeek-7B-Math-Compare-Answer)
+DeepSeek-Math-Compare-Answer
 
 Now we implement compare compare_with_local_model.py
 ### Example Command
